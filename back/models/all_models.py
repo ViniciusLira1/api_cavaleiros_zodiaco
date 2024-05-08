@@ -1,0 +1,1 @@
+from .modelCavaleiros import CavaleirosModel
