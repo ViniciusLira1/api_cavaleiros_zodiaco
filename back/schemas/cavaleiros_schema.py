@@ -6,7 +6,7 @@ class CavaleirosSchema(SCBaseModel):
     nome: str
     signo: str 
     armadura:str 
-    poder_especial: str 
+    poder_especial:str 
     url : str 
     
     class Config:

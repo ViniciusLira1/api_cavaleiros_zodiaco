@@ -1,10 +1,7 @@
 from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException, Response
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-
-
 from models.modelInimigosCavaleiros import InimigosCavaleirosModel
 from schemas.inimigos_cavaleiros_schema import InimigosCavaleirosSchema
 from core.deps import get_session
@@ -12,7 +9,7 @@ from core.deps import get_session
 router = APIRouter()
 
 @router.get("/",response_model=List[InimigosCavaleirosSchema])
-async def get_cavaleiros(db:AsyncSession = Depends(get_session)):
+async def get_inimigos_cavaleiros(db:AsyncSession = Depends(get_session)):
     async with db as session :
         query = select(InimigosCavaleirosModel)
         result = await session.execute(query)
@@ -20,7 +17,7 @@ async def get_cavaleiros(db:AsyncSession = Depends(get_session)):
         return inimigos_cavaleiros
 
 @router.get("/{inimigos_cavaleiros}",response_model=InimigosCavaleirosSchema,status_code=status.HTTP_200_OK)
-async def get_cavaleiro(inimigos_cavaleirosId:int, db:AsyncSession = Depends(get_session)):
+async def get_inimigo_cavaleiro(inimigos_cavaleirosId:int, db:AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id==inimigos_cavaleirosId)
         result= await session.execute(query)
@@ -33,7 +30,7 @@ async def get_cavaleiro(inimigos_cavaleirosId:int, db:AsyncSession = Depends(get
         
         
 @router.post("/",status_code=status.HTTP_201_CREATED,response_model=InimigosCavaleirosSchema)
-async def post_cavaleiro(inimigo_cavaleiro:InimigosCavaleirosSchema,db:AsyncSession = Depends(get_session)):
+async def post_inimigo_cavaleiro(inimigo_cavaleiro:InimigosCavaleirosSchema,db:AsyncSession = Depends(get_session)):
     novo_inimigo_cavaleiro=InimigosCavaleirosModel(nome=inimigo_cavaleiro.nome, signo = inimigo_cavaleiro.signo,armadura=inimigo_cavaleiro.armadura,poder_especial=inimigo_cavaleiro.poder_especial,url=inimigo_cavaleiro.url,id_cavaleiro = inimigo_cavaleiro.id_cavaleiro)
     db.add(novo_inimigo_cavaleiro)
     await db.commit()
@@ -41,7 +38,7 @@ async def post_cavaleiro(inimigo_cavaleiro:InimigosCavaleirosSchema,db:AsyncSess
 
 
 @router.put("/{cavaleiro_id}",status_code=status.HTTP_202_ACCEPTED,response_model=InimigosCavaleirosSchema)
-async def put_cavaleiro(cavaleiro_id,cavaleiro:InimigosCavaleirosSchema,db:AsyncSession = Depends(get_session)):
+async def put_inimigo_cavaleiro(cavaleiro_id,cavaleiro:InimigosCavaleirosSchema,db:AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id == cavaleiro_id)
         result = await session.execute(query)
@@ -61,7 +58,7 @@ async def put_cavaleiro(cavaleiro_id,cavaleiro:InimigosCavaleirosSchema,db:Async
 
 
 @router.delete("/{cavaleiro_id}",status_code=status.HTTP_204_NO_CONTENT)
-async def delete_cavaleiro(cavaleiro_id,db:AsyncSession = Depends(get_session)):
+async def delete_inimigo_cavaleiro(cavaleiro_id,db:AsyncSession = Depends(get_session)):
     async with db as session:
         query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id == cavaleiro_id)
         result = await session.execute(query)

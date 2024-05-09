@@ -1,11 +1,11 @@
 from typing import List
 from fastapi import APIRouter, status, Depends, HTTPException, Response
-
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-
 from models.modelCavaleiros import CavaleirosModel
+from models.modelInimigosCavaleiros import InimigosCavaleirosModel
 from schemas.cavaleiros_schema import CavaleirosSchema
+from schemas.inimigos_cavaleiros_schema import InimigosCavaleirosSchema
 from core.deps import get_session
 
 router = APIRouter()
@@ -30,6 +30,20 @@ async def get_cavaleiro(cavaleiro_id:int, db:AsyncSession = Depends(get_session)
             return cavaleiro
         else:
             raise HTTPException(detail="Cavaleiro nao encontrado",status_code=status.HTTP_404_NOT_FOUND)
+        
+        
+@router.get("/cavaleiro-inimigo/{cavaleiro_id}",status_code=status.HTTP_200_OK,response_model=list[InimigosCavaleirosSchema])
+async def get_inimigo_cavaleiro(cavaleiro_id:int, db:AsyncSession = Depends(get_session)):
+    async with db as session:
+        query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id_cavaleiro==cavaleiro_id)
+        result= await session.execute(query)
+        inimigos: list[InimigosCavaleirosModel] = result.scalars().all()
+        
+        if inimigos:
+            return inimigos
+        else:
+            raise HTTPException(detail="Cavaleiro nao encontrado",status_code=status.HTTP_404_NOT_FOUND)
+        
         
         
 @router.post("/",status_code=status.HTTP_201_CREATED,response_model=CavaleirosSchema)
