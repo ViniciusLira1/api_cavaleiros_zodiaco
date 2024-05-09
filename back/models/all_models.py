@@ -1,1 +1,2 @@
 from .modelCavaleiros import CavaleirosModel
+from .modelInimigosCavaleiros import InimigosCavaleirosModel
