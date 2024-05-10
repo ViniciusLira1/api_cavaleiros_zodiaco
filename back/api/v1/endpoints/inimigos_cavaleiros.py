@@ -42,30 +42,31 @@ async def put_inimigo_cavaleiro(cavaleiro_id,cavaleiro:InimigosCavaleirosSchema,
     async with db as session:
         query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id == cavaleiro_id)
         result = await session.execute(query)
-        cavaleiro_up=result.scalar_one_or_none()
+        inimigo_cavaleiro_up=result.scalar_one_or_none()
         
-        if cavaleiro_up:
-            cavaleiro_up.nome = cavaleiro.nome
-            cavaleiro_up.signo = cavaleiro.signo
-            cavaleiro_up.armadura=cavaleiro.armadura
-            cavaleiro_up.poder_especial=cavaleiro.poder_especial
-            cavaleiro_up.url=cavaleiro.url
+        if inimigo_cavaleiro_up:
+            inimigo_cavaleiro_up.nome = cavaleiro.nome
+            inimigo_cavaleiro_up.signo = cavaleiro.signo
+            inimigo_cavaleiro_up.armadura=cavaleiro.armadura
+            inimigo_cavaleiro_up.poder_especial=cavaleiro.poder_especial
+            inimigo_cavaleiro_up.url=cavaleiro.url
+            inimigo_cavaleiro_up.id_cavaleiro=cavaleiro.id_cavaleiro
             
             await session.commit()
-            return cavaleiro_up
+            return inimigo_cavaleiro_up
         else:
              raise HTTPException(detail="Cavaleiro nao encontrado",status_code=status.HTTP_404_NOT_FOUND)
 
 
-@router.delete("/{cavaleiro_id}",status_code=status.HTTP_204_NO_CONTENT)
-async def delete_inimigo_cavaleiro(cavaleiro_id,db:AsyncSession = Depends(get_session)):
+@router.delete("/{inimigo_cavaleiro_id}",status_code=status.HTTP_204_NO_CONTENT)
+async def delete_inimigo_cavaleiro(inimigo_cavaleiro_id,db:AsyncSession = Depends(get_session)):
     async with db as session:
-        query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id == cavaleiro_id)
+        query = select(InimigosCavaleirosModel).filter(InimigosCavaleirosModel.id == inimigo_cavaleiro_id)
         result = await session.execute(query)
-        cavaleiro_del=result.scalar_one_or_none()
+        inimigo_cavaleiro_del=result.scalar_one_or_none()
         
-        if cavaleiro_del:
-            await session.delete(cavaleiro_del)
+        if inimigo_cavaleiro_del:
+            await session.delete(inimigo_cavaleiro_del)
             await session.commit()
             return Response(status_code=status.HTTP_204_NO_CONTENT)
         else:

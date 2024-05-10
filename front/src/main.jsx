@@ -4,15 +4,17 @@ import { BrowserRouter,Routes,Route } from 'react-router-dom';
 import App from './App.jsx';
 import './index.css';
 import Home from './pages/Home.jsx';
+import DetalhesInimigo from './pages/DetalheInimigo.jsx';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
     <Routes>
-      <Route element = {<App/>}>
+     
         <Route path="/" element={<Home/>}/>
-      </Route>
+        <Route path="/detalhes/:idCavaleiro" element={<DetalhesInimigo/>} />
+    
     </Routes>
     </BrowserRouter>
    

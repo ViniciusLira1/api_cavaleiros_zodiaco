@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Card = ({idCavaleiro, nome, signo, armadura, poderEspecial, imagemUrl }) => {
+const Card = ({ nome, signo, armadura, poderEspecial, imagemUrl,idCavaleiro }) => {
   return (
     <div className="card">
       <img src={imagemUrl} alt={nome} />

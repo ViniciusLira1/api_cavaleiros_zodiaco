@@ -5,16 +5,14 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="API de cavaleiros do Zodiaco")
 app.include_router(api_router,prefix=settings.API_V1_STR)
-origins = [
-    "http://127.0.0.1:5500",
-]
+
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins = origins,
+    allow_origins = ['*'],
     allow_credentials=True,
     allow_methods=['*'],
-    allow_headers=['*']
+    allow_headers=['*'],
 )
 
 if __name__ == "__main__":
